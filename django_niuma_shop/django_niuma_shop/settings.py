@@ -76,8 +76,11 @@ WSGI_APPLICATION = 'django_niuma_shop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'niuma_shop',
+        'HOST': '127.0.0.1',
+        'USER': 'niuma_shop',
+        'PASSWORD': '123456'
     }
 }
 
