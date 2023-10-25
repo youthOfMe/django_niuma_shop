@@ -39,10 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps',
-    'apps.users'
+    'apps.users',
+    # 配置cors包
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    # 配置cors中间件
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -195,3 +199,13 @@ LOGGING = {
 
 # 进行覆盖系统的用户模型
 AUTH_USER_MODEL = "users.User"
+
+# 配置CORS白名单
+CORS_ORIGIN_WHITELIST = [
+    "http://127.0.0.1:8080",
+    "http://localhost:8080",
+    "http://www.meiduo.site:8080",
+    "http://www.meiduo.site:8000"
+]
+
+CORS_ALLOW_CREDENTIALS = True # 设置允许跨域请求设置token
