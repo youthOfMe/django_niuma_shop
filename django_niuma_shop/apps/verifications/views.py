@@ -17,3 +17,5 @@ class ImageCodeView(View):
         redis_cli.setex(uuid, 100, text)
         # 4. 返回图片二进制数据
         return HttpResponse(image, content_type='image/jpeg')
+
+# 配置短信验证码接口类
