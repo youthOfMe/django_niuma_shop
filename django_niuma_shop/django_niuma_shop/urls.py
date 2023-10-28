@@ -26,4 +26,6 @@ urlpatterns = [
     path('log/', log),
     # 配置apps.users子应用中的路由函数
     path('', include('apps.users.urls')),
+    # 配置apps.verification子应用中的路由函数
+    path('', include('apps.verifications.urls')),
 ]

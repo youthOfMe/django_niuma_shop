@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'apps',
     'apps.users',
     # 配置cors包
-    'corsheaders'
+    'corsheaders',
+    'apps.verifications',
 ]
 
 MIDDLEWARE = [
@@ -145,6 +146,13 @@ CACHES = {
     "session": {  # 保存session数据
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://43.138.118.145:6385/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    "code": { # 保存code数据
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://43.138.118.145:6385/2",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
