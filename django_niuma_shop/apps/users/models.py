@@ -6,6 +6,7 @@ class User(AbstractUser):
     identifier = models.CharField(max_length = 40, unique = True, default='')
     USERNAME_FIELD = 'identifier'
     mobile = models.CharField(max_length = 11, unique = True)
+    email_active = models.BooleanField(default = False, verbose_name='邮箱验证状态')
 
     # 进行修改表名
     class Meta:

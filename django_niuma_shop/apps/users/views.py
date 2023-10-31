@@ -140,3 +140,17 @@ class LogoutView(View):
 
         return response
 
+# 进行配置用户中心接口类
+from utils.view import LoginRequiredJSONMixin
+class CenterView(LoginRequiredJSONMixin, View):
+
+    def get(self, request):
+
+        info_data = {
+            'username': request.user.username,
+            'email': request.user.email,
+            'mobile': request.user.mobile,
+            'email_active': request.user.email_active,
+        }
+
+        return JsonResponse({ 'code': 0, 'errmsg': 'ok', 'info_data': info_data })
