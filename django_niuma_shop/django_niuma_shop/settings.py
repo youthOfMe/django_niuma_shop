@@ -217,3 +217,9 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True # 设置允许跨域请求设置token
+
+# 进行设置邮件服务器
+EMAIL_BACKEND = 'djnago.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_HOST = 25
+

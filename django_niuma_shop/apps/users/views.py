@@ -154,3 +154,5 @@ class CenterView(LoginRequiredJSONMixin, View):
         }
 
         return JsonResponse({ 'code': 0, 'errmsg': 'ok', 'info_data': info_data })
+
+# 配置设置邮箱接口类
