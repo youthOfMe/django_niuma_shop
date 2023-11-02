@@ -156,3 +156,42 @@ class CenterView(LoginRequiredJSONMixin, View):
         return JsonResponse({ 'code': 0, 'errmsg': 'ok', 'info_data': info_data })
 
 # 配置设置邮箱接口类
+class EmailView(LoginRequiredJSONMixin, View):
+
+    def put(self, request):
+        # 1. 接收请求
+        data = json.loads(request.body.decode())
+        # 2. 获取数据
+        email = data.get('email')
+        # 3. 验证数据
+        if not (all([email]) and re.match('^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$', email)):
+            return JsonResponse({ 'code': 400, 'errmsg': '邮箱格式不正确' })
+
+        # 4. 保存邮箱地址
+        user = request.user
+        user.email = email
+        user.save()
+
+        # 5. 进行发送一封激活邮件
+        subject = '牛马商城激活验证消息'
+        message = ''
+        from_email = '牛马商城全球授权商<15315382573@163.com>'
+        recipient_list = [email]
+        from .utils import generic_email_verify_token
+        token = generic_email_verify_token(request.user.id)
+        verify_url = 'http://www.meiduo.site:8080/success_verify_email.html?token=%s'%token
+        html_message = '<p>尊敬的老铁你好!</p>' \
+                        '<p>感谢您访问牛马商城</p>' \
+                        '<p>您的邮箱是: %s 请您点击此连接激活您的邮箱:</p>' \
+                        '<p><a href="%s">%s</a></p>' % (email, verify_url, verify_url)
+        from celery_tasks.email.tasks import celery_send_email
+        celery_send_email.delay(
+            subject = subject,
+            message = message,
+            from_email = from_email,
+            recipient_list = recipient_list,
+            html_message = html_message
+        )
+
+        #6. 返回响应
+        return JsonResponse({ 'code': 0, 'errmsg': 'ok' })

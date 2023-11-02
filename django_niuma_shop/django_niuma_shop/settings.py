@@ -219,7 +219,10 @@ CORS_ORIGIN_WHITELIST = [
 CORS_ALLOW_CREDENTIALS = True # 设置允许跨域请求设置token
 
 # 进行设置邮件服务器
-EMAIL_BACKEND = 'djnago.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.163.com'
-EMAIL_HOST = 25
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '15315382573@163.com'
+EMAIL_HOST_PASSWORD = 'FLHHSEJBCQYSKHUI'
+EMAIL_FROM = '牛马商城全球授权商'
 
