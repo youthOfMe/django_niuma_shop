@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     # 配置cors包
     'corsheaders',
     'apps.verifications',
+    # 配置areas应用包
+    'apps.areas',
 ]
 
 MIDDLEWARE = [
