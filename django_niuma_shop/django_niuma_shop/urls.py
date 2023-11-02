@@ -28,4 +28,6 @@ urlpatterns = [
     path('', include('apps.users.urls')),
     # 配置apps.verification子应用中的路由函数
     path('', include('apps.verifications.urls')),
+    # 配置apps.areas子应用中的路由函数
+    path('', include('apps.areas.urls')),
 ]
