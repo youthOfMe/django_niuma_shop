@@ -195,3 +195,94 @@ class EmailView(LoginRequiredJSONMixin, View):
 
         #6. 返回响应
         return JsonResponse({ 'code': 0, 'errmsg': 'ok' })
+
+# 进行添加地址数据
+from apps.users.models import Address
+class AddressCreateView(LoginRequiredJSONMixin, View):
+
+    def post(self, request):
+        # 1. 接收请求
+        data = json.loads(request.body.decode())
+        # 2. 获取参数 验证参数
+        receiver = data.get('receiver')
+        province_id = data.get('province_id')
+        city_id = data.get('city_id')
+        district_id = data.get('district_id')
+        place = data.get('place')
+        mobile = data.get('mobile')
+        tel = data.get('tel')
+        email = data.get('email')
+
+        user = request.user
+        # 2. 验证参数
+        # 2.1 验证必传参数
+        if not all([receiver, province_id, city_id, district_id, place, mobile]):
+            return JsonResponse({ 'code': 400, 'errmsg': '缺少必传参数' })
+        # 2.2 省市区的id 是否正确
+        # if not(re.match('[1-9][0-9]0{4}', province_id) is None and re.match('[1-9][0-9]{3}0{2}', city_id) is None and re.match('[1-9][0-9]{5}', district_id) is None):
+        #     return JsonResponse({ 'code': 400, 'essmsg': '省市区信息出错' })
+        # 2.3 详细地址的长度
+        if not(2 <= len(place) <= 50):
+            return JsonResponse({ 'code': 400, 'essmsg': '详细地址信息出错' })
+        # 2.4 手机号
+        if not re.match('^1[345789]\d{9}$', mobile):
+            return JsonResponse({ 'code': 400, 'errmsg': '手机号格式错误' })
+        # 2.5 固定电话
+        if not re.match('^(0\d{2,3})-?(\d{7,8})$', tel) and tel:
+            return JsonResponse({ 'code': 400, 'errmsg': '固定电话格式错误' })
+        # 2.6 邮箱
+        if not re.match('^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$', email) and email:
+            return JsonResponse({ 'code': 400, 'errmsg': '邮箱格式错误' })
+
+        # 3. 数据入库
+        new_address = Address.objects.create(
+            user = user,
+            title = receiver,
+            receiver = receiver,
+            province_id = province_id,
+            city_id = city_id,
+            district_id = district_id,
+            place = place,
+            mobile = mobile,
+            tel = tel,
+            email = email,
+        )
+
+        address = {
+            'id':new_address.id,
+            "title": new_address.title,
+            "receiver": new_address.receiver,
+            "province": new_address.province.name,
+            "city": new_address.city.name,
+            "district": new_address.district.name,
+            "place": new_address.place,
+            "mobile": new_address.mobile,
+            "tel": new_address.tel,
+            "email": new_address.email
+        }
+        # 4. 返回响应
+        return JsonResponse({ 'code': 0, 'errmsg': 'ok', 'address': address })
+
+# 进行查询数据
+class AddressView(LoginRequiredJSONMixin, View):
+    def get(self, request):
+        # 1. 查询指定数据
+        user = request.user
+
+        addresses = Address.objects.filter(user = user, is_deleted = False)
+        address_list = []
+        for address in addresses:
+            address_list.append({
+                'id':address.id,
+                "title": address.title,
+                "receiver": address.receiver,
+                "province": address.province.name,
+                "city": address.city.name,
+                "district": address.district.name,
+                "place": address.place,
+                "mobile": address.mobile,
+                "tel": address.tel,
+                "email": address.email
+            })
+        # 3. 返回响应
+        return JsonResponse({ 'code': 0, 'errmsg': 'ok', 'addresses': address_list })

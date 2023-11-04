@@ -1,6 +1,7 @@
 from django.urls import path
 
 from apps.users.views import UsernameCountView, UserModelCountView, RegisterView, LoginView, LogoutView, CenterView, EmailView
+from apps.users.views import AddressCreateView, AddressView
 
 urlpatterns = [
     # 判断用户是否存在
@@ -11,4 +12,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('info/', CenterView.as_view()),
     path('emails/', EmailView.as_view()),
+    path('addresses/create/', AddressCreateView.as_view()),
+    path('addresses/', AddressView.as_view()),
 ]
